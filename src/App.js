@@ -1,33 +1,51 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
  
 // Firts we need to import Feedback
-import Feedback from './components/Feedback'
+// import Feedback from './components/Feedback'
  
-function App({name,age}) {
- 
-  const [counter, setCounter] = useState(0)
-  // setTimeout(()=> setCounter(counter +1),100)
- 
-  console.log('Rendering ${counter}...')
- 
-  const handlePress = ()=>{
-    setCounter(counter+1)
+function App(props) {
+  // const {notes} = props.notes
+  const [newnote, setNewNote] = useState('add a note here')
+  const handleInputChange = (event) =>{
+    console.log(event.target.value)
+    setNewNote(event.target.value)
   }
+  const handleAdd = (event) =>{
+    event.preventDefault()
+    alert('Testing')
+  }
+ 
+  // const [counter, setCounter] = useState(0)
+  // // setTimeout(()=> setCounter(counter +1),100)
+ 
+  // console.log('Rendering ${counter}...')
+ 
+  // const handlePress = ()=>{
+  //   setCounter(counter+1)
+  // }
   return (
-   
- 
- 
   <>
-     <h2>Hello reactjs</h2>
+     {/* <h2>Hello reactjs</h2>
      <h2>{counter}</h2>
      <button
      onClick={()=> setCounter(counter+100000)}
      >Press</button>
-     <Feedback/>
+     <Feedback/> */}
  
- 
+    <h2>Notes</h2>
+    <ul>
+      {props.notes.map(notes =>
+        < li key = {notes.id}>{notes.content}
+        </li>)}
+        
+    </ul>
+    <form>
+      <input value = {newnote} onChange ={handleInputChange}/>
+      <button onClick={handleAdd}>add</button>
+    </form>
+
  
  
   </>  
