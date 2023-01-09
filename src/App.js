@@ -1,14 +1,26 @@
 // import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from "axios"
  
 // Firts we need to import Feedback
 // import Feedback from './components/Feedback'
  
-function App(props) {
+function App() {
   // const {notes} = props.notes
   const [newnote, setNewNote] = useState('add a note here')
-  const handleInputChange = (event) =>{
+  const [notes, setNotes] = useState([])
+
+  useEffect(() =>{
+    axios.get('http://localhost:3001/notes')
+    .then((response) =>{
+      console.log(response)
+      setNotes(response.data)
+    })
+
+  },[])
+
+    const handleInputChange = (event) =>{
     console.log(event.target.value)
     setNewNote(event.target.value)
   }
@@ -36,7 +48,7 @@ function App(props) {
  
     <h2>Notes</h2>
     <ul>
-      {props.notes.map(notes =>
+      {notes.map(notes =>
         < li key = {notes.id}>{notes.content}
         </li>)}
         
