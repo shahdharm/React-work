@@ -1,24 +1,20 @@
 // import logo from './logo.svg';
 import './App.css';
-import { useEffect, useState } from 'react';
-import axios from "axios"
+import { useState } from 'react';
  
 // Firts we need to import Feedback
 // import Feedback from './components/Feedback'
  
-function App() {
+function App(props) {
   // const {notes} = props.notes
-  const [newnote, setNewNote] = useState('add a note here')
-  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('Enter your name')
+  const [notes, setNotes ] = useState(props.notes)
+  const [ShowAll, setShowAll] = useState(true)
 
-  useEffect(() =>{
-    axios.get('http://localhost:3001/notes')
-    .then((response) =>{
-      console.log(response)
-      setNotes(response.data)
-    })
+  const notesToShow = ShowAll
+  ? notes
+  : notes.filter(n => n.important === true)
 
-  },[])
 
     const handleInputChange = (event) =>{
     console.log(event.target.value)
@@ -26,7 +22,18 @@ function App() {
   }
   const handleAdd = (event) =>{
     event.preventDefault()
-    alert('Testing')
+    // alert('Testing')
+    const note ={
+      id: notes.length + 1,
+      content: newNote,
+      date: new Date().toString(),
+      impotant: Math.random() <0.5
+    }
+    if(newNote !== '')setNotes(notes.concat(note))
+    setNewNote('')
+  }
+  const handleDelete = (id) =>{
+    window.confirm(`Do you really want to delete note with id ${id}`)
   }
  
   // const [counter, setCounter] = useState(0)
@@ -47,14 +54,20 @@ function App() {
      <Feedback/> */}
  
     <h2>Notes</h2>
+    <button onClick={() => setShowAll(!ShowAll)}>
+      {ShowAll ? 'show important': 'show all'}
+       
+    </button>
     <ul>
-      {notes.map(notes =>
-        < li key = {notes.id}>{notes.content}
+      {notesToShow.map(notes =>
+        < li key = {notes.id}><p>{notes.content}</p>
+        <p>{notes.date}</p>
+        <button onClick={() => handleDelete(notes.id)}>delete</button>
         </li>)}
         
     </ul>
     <form>
-      <input value = {newnote} onChange ={handleInputChange}/>
+      <input value = {newNote} onChange ={handleInputChange}/>
       <button onClick={handleAdd}>add</button>
     </form>
 
